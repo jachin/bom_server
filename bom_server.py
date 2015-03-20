@@ -3,13 +3,11 @@
 
 import web
 import json
-from pprint import pprint
 
 urls = (
   '/', 'index',
   '/after/(.*)', 'after',
 )
-
 
 db = web.database(dbn="sqlite", db="bom.db")
 
@@ -18,7 +16,12 @@ def json_encode_handler(obj):
     if hasattr(obj, 'isoformat'):
         return obj.isoformat()
     else:
-        raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
+        raise TypeError(
+            'Object of type {0} with value of {1} is not JSON serializable.'.format(
+                type(obj),
+                repr(obj)
+            )
+        )
 
 
 class index:
@@ -46,6 +49,6 @@ class after:
         return json.dumps(upcs, default=json_encode_handler)
 
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     app = web.application(urls, globals())
     app.run()
